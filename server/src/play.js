@@ -174,9 +174,6 @@ var init_routes = function(app) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('not authorized', 401); return; }
 			var game = get_game_by_host(user.ongoing_games, req.query.host);
-			console.log(game);
-			console.log(req.query.host);
-			console.log(user);
 			if(game && ((user.name === game.host.name) || 
 					    (user.name === game.opponent.name))) {
 				var env = { game: game };
@@ -195,12 +192,12 @@ var init_routes = function(app) {
 			if(!user) { res.send('not authorized', 401); return; }
 			var game = get_game_by_host(user.ongoing_games, req.query.host);
 			if(!game) { res.send('no game with host ' + req.query.host + ' exists.', 406); return };
-			if(((user.name === req.query.host) || 
+			if(((user.name === game.host.name) || 
 			    (user.name === game.opp_username))) {
 				validate_game(game, function(err, result) {
 					if(err) { res.send(err, 406); }
 					else { 
-						user_js.register_game(result);
+						user_js.register_game(game.host.name, result);
 						res.send('/user/' + user.name); 
 					}
 				});

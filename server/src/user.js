@@ -36,6 +36,7 @@ var get_last_match_from_url = function(player_url, callback) {
 };
 
 var get_last_match = function(username, callback) {
+//	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
 	db.get_selected_character(username, function(err, character) {
 		if(err) { callback(err); return; }
 		get_last_match_from_url(character.link + 'matches', callback);
@@ -68,7 +69,16 @@ var new_rating = function(user, opponent, result) {
 	return { r: new_r, rd: new_rd };
 };
 
-var register_game = function(result) {
+var remove_game_by_host = function(user, host_name) {
+	for(var i = 0; i < user.ongoing_games.length; i++) {
+		if(user.ongoing_games[i].toObject().host.name === host_name) {
+			user.ongoing_games.splice(i, 1);
+			break;
+		}
+	};
+};
+
+var register_game = function(host_name, result) {
 	db.get_user(result.winner.name, function(err, winner) {
 		if(err) { console.log('failed to get winner with error ', err); return; };
 		db.get_user(result.loser.name, function(err, loser) {
@@ -94,6 +104,8 @@ var register_game = function(result) {
 			loser.rating = Math.round(loser_r.r);
 			loser.rd = loser_r.rd;
 			loser.games_played += 1;
+			remove_game_by_host(winner, host_name);
+			remove_game_by_host(loser, host_name);
 			winner.save(function(err) { if(err) { console.log('failed to save winner with error ', err); }});
 			loser.save(function(err) { if(err) { console.log('failed to save loser with error ', err); }});
 		});
