@@ -1,0 +1,105 @@
+<script>
+	$(function() {
+		$('.menu-dropdown-button').click(function() {
+			$('.menu-dropdown').slideToggle(50, function() {
+				{if not auth_user}
+				$('#login-username').focus();
+				{/if}
+			});
+		});
+
+		$('.container').click(function(event_obj) {
+			var click_elm = $(event_obj.target);
+			if(!(click_elm.hasClass('menu-dropdown-button') || 
+			     click_elm.closest('div').hasClass('menu-content'))) {
+				$('.menu-dropdown').slideUp(50);
+			}
+		});
+
+		$('#register-button').click(function() {
+			$('#register-content').modal({overlayClose: true});
+		});
+	});
+</script>
+<div class="container" style="background-color: #333;">
+	<div class="row">
+		<div class="onecol"></div>
+		<div class="tencol">
+			<div id="menu">
+				<a href="/"><img src="/images/logo.png" id="header-image"></a>
+				<div id="navigation">
+					<a href="/page/maps">Maps</a>
+					<a href="/page/chat">Chat</a>
+				</div>
+				<div id="user_area">
+					{if auth_user}
+					<a class="menu-dropdown-button">{auth_user.name}<img src="/images/triangle_down.png"></a>
+					{else}
+					<a id="register-button">register</a>
+					<a id="login-button" class="menu-dropdown-button">login</a>
+					{/if}
+				</div>
+			</div>
+		</div>
+		<div class="onecol last"></div>
+	</div>
+</div>
+{if auth_user}
+<div class="container" style="height: 0px; overflow: visible;">
+	<div class="row">
+		<div class="onecol"></div>
+		<div class="tencol">
+			<div class="menu-dropdown menu-content triangle-border top">
+				<a href="/page/play">Play</a>
+				<a href="/user/{auth_user.name}">Profile</a>
+				<a href="/page/options">Edit</a>
+				<a href="/logout">Logout</a>
+			</div>
+		</div>
+		<div class="onecol"></div>
+	</div>
+</div>
+{else}
+<div class="container" style="height: 0px; overflow: visible;">
+	<div class="row">
+		<div class="onecol"></div>
+		<div class="tencol">
+			<div class="menu-dropdown menu-content triangle-border top">
+				<h2 style="margin-top: 0;">Login</h2>
+				<form id="login-form" class="form-auto-submit" action="/login" method="get">
+					<h3>Username</h3>
+					<input id="login-username" type="text" name="name">
+					<h3>Password</h3>
+					<input type="password" name="password">
+					<p class="error-message"></p>
+					<a class="button button-submit" href="#">login</a>
+				</form>	
+			</div>
+		</div>
+		<div class="onecol"></div>
+	</div>
+</div>
+<div id="register-content" style="display: none;">
+<form id="new_user" class="form-auto-submit" action="/new_user" method="get" success-fn="registration_accepted">
+	<div class="register-part">
+		<h2>Register</h2>
+		<h3>Username</h3>
+		<input type="text" name="name">
+		<h3>Password</h3>
+		<input type="password" name="password">
+		<h3>Password confirmation</h3>
+		<input type="password" name="password2">
+		<p class="error-message"></p>
+		<a class="button button-submit" href="#">New user</a>
+	</div>
+</form>
+</div>
+<script>
+	window.registration_accepted = function(data) {
+		$.ajax(data, {
+			success: function(data) { window.location.replace(data); },
+			error: function() { window.location.replace('/'); }
+		});
+	};
+</script>
+{/if}

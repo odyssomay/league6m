@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	{>partials.head}
+	<title>league6m - Play</title>
+	<link rel="stylesheet" href="/css/play.css" type="text/css" media="screen" />
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol">
+			<h2>Your Ongoing Games</h2>
+			{for game in auth_user.ongoing_games}
+			<a href="/game?host={game.host.name}">{game.host.name} vs {game.opponent.name}</a><br>
+			{/for}
+			<h2>Open Games</h2>
+			<a id="new-game-button" class="button add">new game</a>
+			<table id="open-games"></table>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+<div id="confirm-dialog" style="display: none;">
+	<h2>Confirm game</h2>
+	<p>User <span id="user-data"></span> would like to play your game.</p>
+	<a id="decline-game" class="button big">decline</a>
+	<a id="accept-game" class="button big">accept</a>
+</div>
+<div id="new-game-dialog" style="display: none;">
+	<form class="form-auto-submit" action="/new_game" method="get" success-fn="new_game_success">
+		<h2>New game</h2>
+		<h3>Name</h3>
+		<select name="map" id="map_selection">
+			{for map in maps}
+			<option value="{map.bnet_name}">{map.name}</option>
+			{/for}
+		</select>
+		<br><br>
+		<div style="text-align: center">
+			<p class="error-message"></p>
+			<a class="button big button-submit">create</a>
+		</div>
+	</form>
+</div>
+<div id="waiting-for-confirm-dialog" style="display: none;">
+	<h2>Waiting for confirmation</h2>
+	<img src="/images/loading_white.gif">
+	<a id="cancel-confirm-button" class="button big">cancel</a>
+</div>
+<script>
+var url = 'http://' + window.location.host.split(':')[0] + ':8082';
+var socket = io.connect(url);
+{if auth_user}
+var username = "{auth_user.name}";
+{else}
+var username = null;
+{/if}
+
+socket.on('connect', function() {
+	if(username) {
+		socket.emit('username', username);
+	}
+});
+
+socket.on('games', function(games) {
+	var open_games = $('#open-games');
+	open_games.empty();
+	if(games.length === 0) {
+		open_games.append('<p>No open games, sorry :(</p>');
+	}
+	else {
+		open_games.append('<tr><td>Author</td><td>Rank</td><td>Map</td></tr>');
+		for(var i = 0; i < games.length; i += 1) {
+			var game = games[i]
+			var td = function(str) {
+				return '<td onclick="start_game(\'' + game.host.name + '\')">' + str + '</td>';
+			};
+			open_games.append('<tr class="game-entry">' + td(game.host.name) + td(game.host.rating) + td(game.map) + '</tr>');
+		}
+	}
+});
+
+$(function() {
+	var from_user;
+	
+	socket.on('confirm game', function(user) {
+		console.log('confirming');
+		from_user = user;
+		$('#user-data').empty().append(user.name + ' rank ' + user.rating);
+		$('#confirm-dialog').modal();
+	});
+
+	socket.on('confirm game cancelled', function(username) {
+		if(from_user.name === username) {
+			$.modal.close();
+		}
+	});
+
+	socket.on('accepted', function(host_username) {
+		window.location.href = '/game?host=' + host_username;
+	});
+
+	socket.on('declined', function(host_username) {
+		$.modal.close();
+	});
+
+	$('#accept-game').click(function() {
+		$.ajax('/accept_game?opp_username=' + from_user.name, {
+			success: function(data) { window.location.href = data; }
+		});
+	});
+
+	$('#decline-game').click(function() {
+		$.ajax('/decline_game?opp_username=' + from_user.name, {
+			success: function() { $.modal.close() }
+		});
+	});
+
+	$('#new-game-button').click(function() {
+		$('#new-game-dialog').modal({overlayClose: true});	
+	});
+
+	window.new_game_success = function() {
+		$.modal.close();
+	}
+
+	var hostname;
+	window.start_game = function(username) {
+		$.ajax('/start_game?host=' + username, {
+			error: function(xhr) { console.log(xhr.responseText); },
+			success: function(data) {
+				if(data === 'self') {
+					window.location.replace('/page/play');
+				}
+				else {
+					$('#waiting-for-confirm-dialog').modal();
+					hostname = username;
+				}
+			}
+		});
+	}
+
+	$('#cancel-confirm-button').click(function() {
+		if(hostname) {
+			$.get('/cancel_confirm_game?host=' + hostname);
+			$.modal.close();
+			hostname = null;
+		}
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+	{>partials.head}
+	<title>league6m - Edit</title>
+	<link rel="stylesheet" href="/css/options.css" type="text/css" media="screen" />
+</head>
+<script>
+	$(function() {
+
+		/* Getting the elements anew is necessary each time, 
+		   because simplemodal removes/inserts the element used as modal */
+
+		$('#new_character_button').click(function() {
+			$.modal.close();
+			$('#new_character_content_one').modal();
+		});
+
+		$('.cancel-character').click(function() {
+			$.modal.close();
+		});
+
+		$('#validate-character-button').click(function() {
+			$('#validate-character-button').hide();
+			$('#validate-character-loading').show();
+			$('#validate-character-error').hide();
+			$.ajax('/validate_character', {
+				success: function() { window.location.reload(); }
+				, error: function(xhr) {
+					$('#validate-character-error').show().empty().append(xhr.responseText);
+					$('#validate-character-loading').hide();
+					$('#validate-character-button').show();
+				}
+			});
+		});
+
+		window.character_step_one_success = function(data) {
+			$.modal.close();
+			$('#new_character_content_two').modal();
+			var map = JSON.parse(data);
+			$('#new_character_game').empty().append("Map: " + map.name + ", speed: " + map.speed);
+		}
+
+		$('.character_select_radio').each(function(i, element) {
+			var j_element = $(element);
+
+			j_element.click(function() {
+				$.ajax('/select_character?identifier=' + j_element.attr('value'), {
+					success: function() { window.location.reload(); }
+				});
+			});
+		});
+
+		$('input[name=bnet_character_selection]').each(function(i, element) {
+			var j_element = $(element);
+			if(j_element.attr('value') === '{auth_user.selected_character}') {
+				j_element.attr('checked', true);
+			}
+		});
+	});
+</script>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol options-container">
+			{if auth_user}
+			<h2>Battle.net characters</h2>
+			<form action="/select_bnet_character" method="get">
+				<table id="characters-list">
+					<tr>
+						<td>Use</td>
+						<td>Name</td>
+						<td>Code</td>
+						<td>Server</td>
+						<td>link</td>
+						<td></td>
+					</tr>
+					{for character in auth_user.bnet_characters}
+					<tr>
+						<td><input type="radio" class="character_select_radio" 
+							name="bnet_character_selection" value="{character.identifier}" {if character.selected}checked{/if}></td>
+						<td>{character.name}</td>
+						<td>{character.code}</td>
+						<td>{character.server}</td>
+						<td><a href="{character.link}">link</a></td>
+						<td><a href="/remove_character?identifier={character.identifier}" class="button delete character-remove">remove</a></td>
+					</tr>
+					{/for}
+				</table>
+			</form>
+			<a class="button add-big" id="new_character_button">Add character</a>
+			<h2>Password</h2>
+			<form class="form_auto_submit" action="/new_password" method="get">
+				<h3>New password</h3>
+				<input type="password" name="password_input">
+				<h3>Confirm new password</h3>
+				<input type="password" name="password_input2">
+				<h3>Current Password</h3>
+				<input type="password" name="old_password">
+				<br>
+				<p class="error-message"></p>
+				<a href="#" class="button button-submit">save password</a>
+			</form>
+			{else}
+			<p>You need to be logged in to edit your user :)</p>
+			{/if}
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>			
+<div style="display: none;">
+	<div id="new_character_content_one" class="new_character_step">
+		<form class="form-auto-submit" success-fn="character_step_one_success" action="/new_character" method="get">
+			<h2>New character</h2>
+			<p class="character-step">Step 1 of 2</p>
+			<h3>Name</h3>
+			<input type="text" name="name">
+			<h3>Code</h3>
+			<input type="text" name="code">
+			<h3>Server</h3>
+			<select name="server">
+				<option value="EU">EU</option>
+				<option value="US">US</option>
+				<option value="KR">KR</option>
+				<option value="SEA">SEA</option>
+			</select>
+			<h3>Link</h3>
+			<input type="text" name="link">
+			<br>
+			<p class="error-message"></p>
+			<br>
+			<a href="#" class="button cancel-character">cancel</a>
+			<a href="#" class="button button-submit" id="next-character">next</a>
+		</form>
+	</div>
+	<div id="new_character_content_two" class="new_character_step">
+		<h2>New character</h2>
+		<p class="character-step">Step 2 of 2</p>
+		<p>To finish the creation of this character, you
+		need to prove that it is actually yours.<br>
+		To do that, you need to open a game of:</p>
+		<p id="new_character_game"></p>
+		<p>And press the validate button below</p>
+		<div id="validate-container">
+			<img src="/images/loading_white.gif" id="validate-character-loading" style="display: none;">
+			<a href="#" class="button big" id="validate-character-button">validate</a>
+			<p id="validate-character-error" class="error-message"></p>
+		</div>
+		<a href="#" class="button cancel-character">cancel</a>
+	</div>
+</div>
+</body>
+</html>

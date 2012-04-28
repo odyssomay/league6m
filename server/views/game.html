@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	{>partials.head}
+	<title>league6m - {game.host.name} vs {game.opponent.name}</title>
+	<link rel="stylesheet" href="/css/game.css" type="text/css" media="screen">
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol" id="content">
+			<h2>You are playing</h2>
+			<p id="opponent_character">{if is_host} {game.opponent.selected_character} {else} {game.host.selected_character} {/if}</p>
+			<p>On map</p>
+			<p id="map"><span class="apostrophe">'</span>{game.map}<span class="apostrophe">'</span></p>
+			<p>When the game has ended, press the validate button below</p>
+			<div id="validation-container">
+				<p id="validation-error" class="error-message"></p>
+				<a id="validation-button" class="button big">validate</a>
+<!--				<p>- or -</p>
+				<p>Select the outcome below</p>
+				<a class="button big" id="host_won_button">{game.host.name} won</a>
+				<a class="button big" id="draw_button">draw</a>
+				<a class="button big" id="opponent_won_button">{game.opponent.name} won</a> --!>
+			</div>
+			<div id="validation-loading" style="display: none;">
+				<img src="/images/loading.gif">
+			</div>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+</body>
+<script>
+	$(function() {
+		$('#validation-button').click(function() {
+			$('#validation-container').hide();
+			$('#validation-loading').show();
+			$.ajax('/validate_game?host=' + getURLParameter('host'), {
+				success: function(data) { window.location.href = data; } ,
+				error: function(xhr) { 
+					$('#validation-container').show();
+					$('#validation-loading').hide();
+					$('#validation-error').empty().append(xhr.responseText).show();
+				}
+			});	
+		});
+	});
+</script>
+</html>

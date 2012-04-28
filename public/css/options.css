@@ -1,0 +1,23 @@
+#characters-list {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+#characters-list td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid black;
+}
+.character-remove { float: right; }
+
+.options-container h3 { margin-top: 5px; }
+
+.new_character_step { padding: 20px; color: white; }
+.new_character_step h2 {margin: 0; }
+.new_character_step p { font-size: 0.9em; }
+
+#validate-container { text-align: center; margin-top: 2em; margin-bottom: 2em; }
+
+.character-step { font-size: 0.8em; margin-bottom: 10px; }
+#next-character { float: right; }

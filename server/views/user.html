@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	{>partials.head}
+	<title>league6m - {user.name}</title>
+	<link rel="stylesheet" href="/css/user.css" type="text/css" media="screen" />
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="onecol"></div>
+		<div class="twocol">
+			<div class="player_portrait"></div>
+		</div>
+		<div class="eightcol user_content">
+			<h2>{user.name}</h2>
+			<p>Rating: {user.rating}</p>
+			<p>Games played: {user.games_played}</p>
+			<p>Games won: {user.games_won}</p>
+			<h3>Latest games</h3>
+			<table id="games_container">
+				<tr>
+					<td>Opponent</td>
+					<td>Map</td>
+					<td>Result</td>
+					<td>Rating Change</td>
+				</tr>
+				{for game in user.games}
+				<tr>
+					<td><a href="/user/{game.opponent_name}">{game.opponent_name}</a></td>
+					<td>{game.map}</td>
+					<td class="{if game.result}win-style{else}loss-style{/if}">{if game.result}Win{else}Loss{/if}</td>
+					<td class="{if game.result}win-style{else}loss-style{/if}">{game.rating_diff}</td>
+				</tr>
+				{/for}
+			</table>
+		</div>
+		<div class="onecol last"></div>
+	</div>
+</div>
+</body>
+</html>

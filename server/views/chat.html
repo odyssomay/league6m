@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	{>partials.head}
+	<title>league6m - Chat</title>
+	<link rel="stylesheet" href="/css/chat.css" type="text/css" media="screen" />
+	<script>
+		var username = {if auth_user} "{auth_user.name}" {else} "Anonymous" {/if};
+		var is_anonymous = {if auth_user} false {else} true {/if};
+	</script>
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol">
+			<h2>Chat</h2>
+			<table id="chat-container">
+				<tr>
+					<td>
+						<div id="messages-container">
+						</div>
+					</td>
+					<td id="users-container">
+						<div id="user-list"></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="text" id="message-input" autocomplete="off">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
+</body>
+</html>
+

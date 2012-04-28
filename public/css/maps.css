@@ -1,0 +1,61 @@
+p + p {
+	margin-top: 0.3em;
+}
+
+.map { 
+	position: relative;
+	margin-top: 2em;
+	padding-bottom: 2em;
+	border-bottom: 1px solid #555;
+}
+
+.map img {
+	margin-right: 30px;
+}
+
+.map h2 {
+	margin-top: 0;
+	margin-bottom: 0em;
+}
+
+.map h3 {
+	margin-bottom: 1em;
+}
+
+.map a {
+	font-size: 0.8em;
+}
+
+.map p {
+	margin-left: 30px;
+}
+
+.map_preview {
+	display: block;
+	float: left;
+	background-color: black;
+	opacity: 1;
+}
+
+.map_preview:hover {
+/*	opacity: 0.8;  */
+	box-shadow: 0 0 0 3px #CCC;
+}
+
+.map_magnify {
+	position: absolute;
+	left: 0; 
+	top: 5px; 
+	width: 24px;
+}
+
+.map-by {
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+.apostrophe {
+	color: red;
+	font-weight: bold;
+}
+

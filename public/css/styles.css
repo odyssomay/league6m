@@ -1,0 +1,299 @@
+/* ============================== */
+/* ! Layout for desktop version   */
+/* ============================== */
+
+	html, body {
+		min-height: 100%;
+	}
+
+	body {
+		font-family: Helvetica, sans-serif;
+		letter-spacing: 0.5px;
+	}
+	
+	h1,h2,h3,h4,h5 { font-weight: normal; color: #888; }
+	h1 {
+/* 		font-family: Helvetica; */
+		font-weight: normal;
+		text-align: center;
+		margin-top: 1em;
+		font-size: 4em;
+		line-height: 2em;
+	}
+
+	h2 {
+		font-size: 2em;
+		margin-top: 0.5em;
+		margin-bottom: 0.3em;
+	}
+
+	h3 {
+		margin-bottom: 0.3em;
+	}
+
+	p {
+		font-size: 1.1em;
+		line-height: 1.7em;
+	}
+
+	p + p {
+		margin-top: 1em;
+	}
+
+	a {
+		text-decoration: none;
+		color: #55A;
+		font-weight: bold;
+	}
+
+	a:hover {
+		cursor: pointer;
+		text-decoration: underline;
+		color: #338;
+	}
+
+	input[type="submit"] { display: block; }
+	input[type="text"], input[type="password"] {
+		padding: 5px;
+		border: 1px solid #999;
+		border-radius: 5px;
+		margin-bottom: 0.5em;
+	}
+
+	input:hover {
+		box-shadow: inset 0 0 1px black;
+	}
+
+	input:focus {
+		box-shadow: inset 0 0 1px black;
+	}
+
+	#menu {
+		text-align: left;
+		background: #333;
+		height: 80px;
+		border-radius: 10px;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+
+	#menu a {
+		color: white;
+		text-decoration: none;
+		line-height: 80px;
+		font-weight: bold;
+		margin: 30px;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	#menu a:hover {
+		text-decoration: underline;
+	}
+	
+	#header-image {
+		float: left;
+		margin-left: 40px;
+		margin-top: 12px;
+	}
+
+	.menu-dropdown {
+/*		position: absolute;
+		right: 20px;
+		top: 20px; */
+		min-width: 150px;
+		float: right;
+		display: none;
+		padding: 10px;
+		background: #333;
+		border-radius: 5px;
+/*		border-top-left-radius: 0;
+		border-top-right-radius: 0; */
+		border: 5px solid #9DA7ED;
+		color: white;
+		z-index: 10;
+	}
+
+	.menu-dropdown h2 {
+		font-size: 1.2em;
+	}
+
+	.menu-dropdown h3 {
+		display: block;
+		font-size: 0.8em;
+	}
+
+	.menu-dropdown input {
+		display: block;
+		font-size: 0.8em;
+	}
+
+	.menu-dropdown a {
+		display: block;
+		color: white;	
+	}
+
+	.menu-dropdown a + a {
+		margin-top: 10px;
+		padding-top: 10px;
+		border-top: 1px solid #555;
+	}
+
+	/* Taken from: http://nicolasgallagher.com/pure-css-speech-bubbles/demo/ */
+
+	.triangle-border {
+		position:relative;
+		padding:15px;
+		margin:1em 0 3em;
+		border:5px solid #9DA7ED;
+		/*color:#333; */
+/*		background:#fff; */
+		/* css3 */
+		-webkit-border-radius:10px;
+		-moz-border-radius:10px;
+		border-radius:10px;
+	}
+
+	.triangle-border:before {
+		content:"";
+		position:absolute;
+		bottom:-20px; /* value = - border-top-width - border-bottom-width */
+		left:40px; /* controls horizontal position */
+		border-width:20px 20px 0;
+		border-style:solid;
+		border-color:#9DA7ED transparent;
+		/* reduce the damage in FF3.0 */
+		display:block; 
+		width:0;
+	}
+
+	/* creates the smaller  triangle */
+	.triangle-border:after {
+		content:"";
+		position:absolute;
+		bottom:-13px; /* value = - border-top-width - border-bottom-width */
+		left:47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+		border-width:13px 13px 0;
+		border-style:solid;
+		border-color:#333 transparent;
+		/* reduce the damage in FF3.0 */
+		display:block; 
+		width:0;
+	}
+
+	/* creates the larger triangle */
+	.triangle-border.top:before {
+		top:-20px; /* value = - border-top-width - border-bottom-width */
+		bottom:auto;
+		left:auto;
+		right:40px; /* controls horizontal position */
+		border-width:0 20px 20px;
+	}
+
+	/* creates the smaller  triangle */
+	.triangle-border.top:after {
+		top:-13px; /* value = - border-top-width - border-bottom-width */
+		bottom:auto;
+		left:auto;
+		right:47px; /* value = (:before right) + (:before border-right) - (:after border-right) */
+		border-width:0 13px 13px;
+	}
+
+	#simplemodal-overlay {background-color:#000;}
+	#simplemodal-container {background-color:#333; border:8px solid #444; padding:12px;}
+	#register-content h2 {margin-top: 0;}
+	.register-part {padding: 20px;}
+	.register-part h3 {margin-top: 10px;}
+	.register-part p {font-size: 0.9em; color: white; margin-bottom: 1em;}
+	.register-part input {display:block;}
+	.register-part input[type="text"] {width: 100%;}
+	.register-part input[type="password"] {width: 100%;}
+	.register-part input[type="submit"] {margin-top: 15px;}
+/*	.register-part td + td { padding-left: 50px; }
+	.register-part input[type="text"]   {width: 100%;} 
+	.register-part input[type="submit"] { float: right; } */
+
+	/* end "taken from" */
+
+	#navigation {
+		float:left;
+		margin-left: 50px;
+	}
+
+	.player_portrait {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 50px;
+		width: 90px;
+		height: 90px;
+		background: url(http://eu.battle.net/sc2/static/local-common/images/sc2/portraits/3-90.jpg?v39) no-repeat scroll -0px -360px transparent;
+		border: 6px solid #DDD;
+		border-radius: 5px;
+		box-shadow: 0 0 2px 3px #CCC;
+	}
+
+	#user_area {
+		float: right;
+	}
+
+	#user_area a {
+		margin-right: 45px;
+	}
+
+	#user_area p {
+		color: white;
+		font-size: 0.8em;
+	}
+
+	/*********************************************************/
+	/* FOOTER */
+
+	.wrapper {
+		min-height: 100%;
+		height: auto !important;
+		height: 100%;
+		margin: 0 auto -60px;
+	}
+	.footer, .push { height: 60px; }
+	.footer_inner {
+		background: #333;
+		border-radius: 10px;
+		border-bottom-right-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	.footer p {
+		font-size: 0.9em;
+		color: white;
+		line-height: 59px;
+		text-align: center;
+	}
+	.footer a { color: #AAF; }
+
+	p.error-message { display: none; font-size: 0.8em; color: red; font-weight: bold; }
+
+/* ============================= */
+/* ! Layout for mobile version   */
+/* ============================= */
+
+@media handheld, only screen and (max-width: 767px) {
+
+	body {
+		
+	}
+
+}
+
+
+/* ========================================== */
+/* ! Provide higher res assets for iPhone 4   */
+/* ========================================== */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) { 
+
+/*	.logo {
+		background: url(logo2x.jpg) no-repeat;
+		background-size: 212px 303px;
+	}*/
+
+}

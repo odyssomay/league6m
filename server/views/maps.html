@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+	{>partials.head}
+	<title>league6m - Maps</title>
+	<link rel="stylesheet" href="/css/maps.css" type="text/css" media="screen" />
+	<script src="/js/lightbox.js"></script>
+	<link href="/css/lightbox.css" rel="stylesheet" />
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	{for map in maps}
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol map">
+			<a href="/images/maps/{map.name}_big.jpg" rel="lightbox[roadtrip]" title="{map.name} by {map.author}">
+				<img src="/images/SEARCH_48x48-32.png" class="map_magnify">
+				<img src="/images/maps/{map.name}.jpg"} class="map_preview"></a>
+			<h2>{map.name}</h2>
+			<h3><span class="map-by">by</span> {map.author}</h3>
+			<p><b>Players</b>: {map.num_players}</p>
+			<p><b>Size</b>: {map.size}</p>
+			<p><b>Battle.net name</b>: <span class="apostrophe">'</span>{map.bnet_name}<span class="apostrophe">'</span></p>
+			<p><a href="{map.TL_thread}">TL thread</a></p>
+		</div>
+		<div class="twocol last"></div>
+	</div>	
+	{/for}
+</div>
+</body>
+</html>

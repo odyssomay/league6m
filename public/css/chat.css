@@ -1,0 +1,51 @@
+
+#chat-container {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#chat-container, #chat-container td, #chat-container tr {
+	border: 1px solid black;
+}
+
+#chat-container td {
+	vertical-align: top;
+}
+
+#messages-container {
+	padding: 20px;
+	padding-bottom: 40px;
+	height: 500px;
+	overflow: auto;
+}
+
+#users-container {
+	padding: 20px;
+	width: 130px;
+	overflow: auto;
+}
+
+.message-user {
+	font-weight: bold;
+}
+
+.message {
+	margin-left: 10px;
+}
+
+#message-input {
+	margin: 0;
+	border: none;
+	width: 98%;
+}
+
+#message-input:hover, #message-input:focus {
+	box-shadow: none;
+	border: none;
+	outline: none;
+}
+
+.anonymous_count {
+	font-size: 0.6em;
+}
+

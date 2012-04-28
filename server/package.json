@@ -1,0 +1,13 @@
+{
+"name":"league6m",
+"version":"1.0.0",
+"dependencies": {
+ "express":"2.5.9"
+, "bcrypt":""
+, "jsdom":""
+, "mongoose":""
+, "socket.io":""
+, "validator":""
+, "whiskers":"0.2.1"
+}
+}

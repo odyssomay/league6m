@@ -1,0 +1,12 @@
+#content { text-align: center; }
+#content h2 { margin-top: 40px; }
+#content p { font-size: 1em;} 
+#content a.button { margin-top: 20px; margin-bottom: 20px; }
+p#opponent_character { font-size: 2em; }
+
+p#map { font-size: 1.5em; }
+.apostrophe { font-weight: bold; color: red; }
+
+#host_won_button { float: left; }
+#opponent_won_button { float: right; }
+
