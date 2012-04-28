@@ -36,7 +36,6 @@ var get_last_match_from_url = function(player_url, callback) {
 };
 
 var get_last_match = function(username, callback) {
-	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
 	db.get_selected_character(username, function(err, character) {
 		if(err) { callback(err); return; }
 		get_last_match_from_url(character.link + 'matches', callback);
