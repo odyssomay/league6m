@@ -9,6 +9,8 @@
 </head>
 <body>
 {>partials.header}
+{if auth_user}
+{if auth_user.selected_character}
 <div class="container">
 	<div class="row">
 		<div class="twocol"></div>
@@ -24,6 +26,28 @@
 		<div class="twocol last"></div>
 	</div>
 </div>
+{else}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol">
+			<p>You have to add a battle.net character to your account, <a href="/page/options">edit account</a></p>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+{/if}
+{else}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol">
+			<p>You have to be logged in to play</p>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+{/if}
 <div id="confirm-dialog" style="display: none;">
 	<h2>Confirm game</h2>
 	<p>User <span id="user-data"></span> would like to join your game.</p>
