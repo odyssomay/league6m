@@ -38,7 +38,7 @@
 			$.modal.close();
 			$('#new_character_content_two').modal();
 			var map = JSON.parse(data);
-			$('#new_character_game').empty().append("Map: " + map.name + ", speed: " + map.speed);
+			$('#new_character_game').empty().append("Map: " + map.name);
 		}
 
 		$('.character_select_radio').each(function(i, element) {
@@ -142,7 +142,7 @@
 		need to prove that it is actually yours.<br>
 		To do that, you need to open a game of:</p>
 		<p id="new_character_game"></p>
-		<p>And press the validate button below</p>
+		<p>Quit the game, and press the validate button below</p>
 		<div id="validate-container">
 			<img src="/images/loading_white.gif" id="validate-character-loading" style="display: none;">
 			<a href="#" class="button big" id="validate-character-button">validate</a>

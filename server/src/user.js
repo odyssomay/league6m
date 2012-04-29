@@ -1,4 +1,5 @@
 var auth = require('./auth.js')
+  , data = require('./data.js')
   , db = require('./db.js');
 
 var jsdom = require('jsdom')
@@ -45,7 +46,7 @@ var get_last_match_from_url = function(player_url, callback) {
 };
 
 //get_last_match_from_url("http://eu.battle.net/sc2/en/profile/2549843/1/Sísyphos/matches", console.log);
-get_last_match_from_url("http://kr.battle.net/sc2/ko/profile/1148174/1/TSLinori/matches", console.log);
+//get_last_match_from_url("http://kr.battle.net/sc2/ko/profile/1148174/1/TSLinori/matches", console.log);
 
 var get_last_match = function(username, callback) {
 //	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
@@ -128,12 +129,14 @@ var register_game = function(id, result) {
 var init_routes = function(app) {
 	var characters_pending = {};
 
-	var maps = ["Agria Valley", "Arid Plateau", "Blistering Sands", "Burial Grounds", "Cloud Kingdom LE"]
+	var maps = []// = ["Agria Valley", "Arid Plateau", "Blistering Sands", "Burial Grounds", "Cloud Kingdom LE"]
 	  , speeds = ["Slower", "Slow", "Normal", "Fast", "Faster"];
+	for(var i = 0; i < data.maps.length; i++) {
+		maps.push(data.maps[i].bnet_name);
+	}
 	var random_game = function() {
-		var rand_map = maps[Math.floor(Math.random() * (maps.length - 1))]
-			, speed = speeds[Math.floor(Math.random() * (speeds.length - 1))]; 
-		return { name: rand_map, speed: speed };
+		var rand_map = maps[Math.floor(Math.random() * (maps.length - 1))];
+		return { name: rand_map };
 	};
 
 	app.get('/new_character', function(req, res) {
@@ -141,7 +144,6 @@ var init_routes = function(app) {
 			if(user) {
 				var p_ch = req.query; // pending character
 
-				console.log(p_ch.code);
 				try {check(p_ch.code).isInt();} catch (e) { res.send('code must be a number', 406); return; };
 //				try {check(p_ch.link).isUrl();} catch (e) { res.send('link is not valid', 406); return; };
 
@@ -166,7 +168,7 @@ var init_routes = function(app) {
 				get_last_match_from_url(p_ch.link + 'matches', function(err, last_map) {
 					if(err) { res.send(err, 406); return; }
 					else {
-						if((last_map.name === game.name) && (last_map.speed === game.speed)) {
+						if(last_map.name === game.name) {
 							delete p_ch.game;
 							p_ch.identifier = p_ch.name + '.' + p_ch.code;
 							db.add_bnet_character(user.name, p_ch, function(err) {
