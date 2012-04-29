@@ -15,7 +15,9 @@ $(function() {
 	});
 
 	socket.on('user message', function(username, message) {
-		$('#messages-container').append('<span class="message-user">' + username + '</span>: <span class="message">' + message + '</span><br>');
+		var d = new Date();
+		$('#messages-container').append('<span class="message-date">' + d.getHours() + ':' + d.getMinutes() +
+			'</span><span class="message-user">' + username + '</span>: <span class="message">' + message + '</span><br>');
 	});
 
 	socket.on('usernames', function (usernames, amount_anonymous) {
@@ -30,6 +32,6 @@ $(function() {
 		if(!amount_anonymous) {
 			amount_anonymous = "no";
 		}
-		$('#user-list').append('<p class="anonymous_count">And ' + amount_anonymous + ' anonymous user' + user_plural);
+		$('#user-list').append('<p class="anonymous_count">' + amount_anonymous + ' anonymous user' + user_plural);
 	});
 });

@@ -25,6 +25,8 @@
 	overflow: auto;
 }
 
+.message-date { margin-right: 8px; font-size: 0.8em; color: #888; }
+
 .message-user {
 	font-weight: bold;
 }
