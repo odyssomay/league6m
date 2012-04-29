@@ -28,7 +28,9 @@ var login = function(req) {
 };
 
 var logout = function(req) {
-	req.session.destroy();
+	if(req.session) {
+		req.session.destroy();
+	}
 };
 
 var init_routes = function(app) {
