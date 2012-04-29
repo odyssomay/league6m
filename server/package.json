@@ -9,5 +9,6 @@
 , "socket.io":""
 , "validator":""
 , "whiskers":"0.2.1"
+, "winston":""
 }
 }
