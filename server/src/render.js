@@ -13,6 +13,7 @@ var get_env = function(req, env, callback) {
 	env.partials = partials;
 	auth.get_auth_user(req, function(user) {
 		env.auth_user = user;
+		if(user && env.auth_user.selected_character === '') { env.auth_user.selected_character = null; };
 		callback(env);
 	});
 };
@@ -23,4 +24,5 @@ var render_page = function(req, name, env, callback) {
 	});
 };
 
+module.exports.get_env = get_env;
 module.exports.render_page = render_page;
