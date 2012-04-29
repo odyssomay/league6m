@@ -21,8 +21,6 @@ var auth = require('./src/auth.js')
   , render = require('./src/render.js')
   , util = require('./src/util.js');
 
-aoeuoeu
-
 var express = require('express')
   , path = require('path');
 
