@@ -16,7 +16,7 @@ $(function() {
 
 	socket.on('user message', function(username, message) {
 		var d = new Date();
-		$('#messages-container').append('<span class="message-date">' + d.getHours() + ':' + d.getMinutes() +
+		$('#messages-container').append('<span class="message-date">' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() +
 			'</span><span class="message-user">' + username + '</span>: <span class="message">' + message + '</span><br>');
 	});
 
