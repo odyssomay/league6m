@@ -177,7 +177,7 @@ var init_routes = function(app) {
 			if(game && ((user.name === game.host.name) || 
 					    (user.name === game.opponent.name))) {
 				var env = { game: game };
-				if(user.name === game.host_name) { env.is_host = true; };
+				if(user.name === game.host.name) { env.is_host = true; };
 				render.render_page(req, 'game', env, function(err, msg) {
 					res.send(msg);
 				});
