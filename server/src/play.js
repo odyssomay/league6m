@@ -104,9 +104,12 @@ var init_routes = function(app) {
 	app.get('/new_game', function(req, res) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('Not authorized, please log out/in again.', 401); return; }
-			create_game({host: {name: user.name, rating: user.rating
-				, selected_character: user.selected_character}, map: req.query.map, id: uuid.v1()});
-			res.send('/page/play');
+			db.get_selected_character(user.name, function(err, character) {
+				if(err) { res.send(err, 406); return; }
+				create_game({host: {name: user.name, rating: user.rating
+					, selected_character: user.selected_character, server: character.server}, map: req.query.map, id: uuid.v1()});
+				res.send('/page/play');
+			});
 		});
 	});
 
