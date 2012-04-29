@@ -12,7 +12,6 @@ var users_in_chat = {}
 
 io.sockets.on('connection', function (socket) {
 	socket.on('user message', function (msg) {
-		var d = new Date();
 		io.sockets.emit('user message', socket.nickname, sanitize(msg).entityEncode());
 	});
 
