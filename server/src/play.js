@@ -104,7 +104,8 @@ var init_routes = function(app) {
 	app.get('/new_game', function(req, res) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('Not authorized, please log out/in again.', 401); return; }
-			create_game({host: {name: user.name, rating: user.rating}, map: req.query.map, id: uuid.v1()});
+			create_game({host: {name: user.name, rating: user.rating
+				, selected_character: user.selected_character}, map: req.query.map, id: uuid.v1()});
 			res.send('/page/play');
 		});
 	});
@@ -148,7 +149,7 @@ var init_routes = function(app) {
 				db.get_user(opp_username, function(err, user) {
 					if(err) { console.log('failed to accept game with error: ', err); return; }
 					game.opp_username = opp_username;
-					game.opponent = {name: user.name};
+					game.opponent = {name: user.name, selected_character: user.selected_character};
 					db.add_ongoing_game(game);
 					opp_socket.emit('accepted', game.id);
 					res.send('/game?id=' + game.id);
