@@ -39,7 +39,7 @@
 		$('#validation-button').click(function() {
 			$('#validation-container').hide();
 			$('#validation-loading').show();
-			$.ajax('/validate_game?host=' + getURLParameter('host'), {
+			$.ajax('/validate_game?id=' + "{game.id}", {
 				success: function(data) { window.location.href = data; } ,
 				error: function(xhr) { 
 					$('#validation-container').show();

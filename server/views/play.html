@@ -15,7 +15,7 @@
 		<div class="eightcol">
 			<h2>Your Ongoing Games</h2>
 			{for game in auth_user.ongoing_games}
-			<a href="/game?host={game.host.name}">{game.host.name} vs {game.opponent.name}</a><br>
+			<a href="/game?id={game.id}">{game.host.name} vs {game.opponent.name}</a><br>
 			{/for}
 			<h2>Open Games</h2>
 			<a id="new-game-button" class="button add">new game</a>
@@ -26,7 +26,7 @@
 </div>
 <div id="confirm-dialog" style="display: none;">
 	<h2>Confirm game</h2>
-	<p>User <span id="user-data"></span> would like to play your game.</p>
+	<p>User <span id="user-data"></span> would like to join your game.</p>
 	<a id="decline-game" class="button big">decline</a>
 	<a id="accept-game" class="button big">accept</a>
 </div>
@@ -100,8 +100,8 @@ $(function() {
 		}
 	});
 
-	socket.on('accepted', function(host_username) {
-		window.location.href = '/game?host=' + host_username;
+	socket.on('accepted', function(id) {
+		window.location.href = '/game?id=' + id;
 	});
 
 	socket.on('declined', function(host_username) {

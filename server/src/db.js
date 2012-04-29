@@ -20,6 +20,7 @@ var GameSchema = new Schema({
   , opponent_name: String
   , result: String
   , rating_diff : Number
+  , id: String
 });
 
 var UserSchema = new Schema({
@@ -161,7 +162,7 @@ var get_selected_character = function(username, callback) {
 	});
 };
 
-var add_ongoing_game = function(username, game) {
+var add_ongoing_game = function(game) {
 	User.update({name: game.host.name}, {$push: {ongoing_games: game}},
 			function(err) {
 				console.log('failed to update host with ', err);

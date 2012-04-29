@@ -36,7 +36,7 @@ var get_last_match_from_url = function(player_url, callback) {
 };
 
 var get_last_match = function(username, callback) {
-//	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
+	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
 	db.get_selected_character(username, function(err, character) {
 		if(err) { callback(err); return; }
 		get_last_match_from_url(character.link + 'matches', callback);
@@ -69,33 +69,33 @@ var new_rating = function(user, opponent, result) {
 	return { r: new_r, rd: new_rd };
 };
 
-var remove_game_by_host = function(user, host_name) {
+var remove_game_by_id = function(user, id) {
 	for(var i = 0; i < user.ongoing_games.length; i++) {
-		if(user.ongoing_games[i].toObject().host.name === host_name) {
+		if(user.ongoing_games[i].id === id) {
 			user.ongoing_games.splice(i, 1);
 			break;
 		}
 	};
 };
 
-var register_game = function(host_name, result) {
+var register_game = function(id, result) {
 	db.get_user(result.winner.name, function(err, winner) {
 		if(err) { console.log('failed to get winner with error ', err); return; };
 		db.get_user(result.loser.name, function(err, loser) {
 			if(err) { console.log('failed to get loser with error ', err); return; };
-			var winner_r = new_rating(result.winner, result.loser, 1);
-			var loser_r = new_rating(result.loser, result.winner, 0);
+			var winner_r = new_rating(winner, loser, 1);
+			var loser_r = new_rating(loser, winner, 0);
 			winner.games.unshift({
 				opponent_name: result.loser.name
 				, map: result.map
 				, result: true
-				, rating_diff: Math.round(winner_r.r - result.winner.rating) 
+				, rating_diff: Math.round(winner_r.r - winner.rating) 
 			});
 			loser.games.unshift({
 				opponent_name: result.winner.name
 				, map: result.map
 				, result: null
-				, rating_diff: Math.round(loser_r.r - result.loser.rating) 
+				, rating_diff: Math.round(loser_r.r - loser.rating) 
 			});
 			winner.rating = Math.round(winner_r.r);
 			winner.rd = winner_r.rd;
@@ -104,8 +104,9 @@ var register_game = function(host_name, result) {
 			loser.rating = Math.round(loser_r.r);
 			loser.rd = loser_r.rd;
 			loser.games_played += 1;
-			remove_game_by_host(winner, host_name);
-			remove_game_by_host(loser, host_name);
+			remove_game_by_id(winner, id);
+			remove_game_by_id(loser, id);
+			console.log(winner);
 			winner.save(function(err) { if(err) { console.log('failed to save winner with error ', err); }});
 			loser.save(function(err) { if(err) { console.log('failed to save loser with error ', err); }});
 		});

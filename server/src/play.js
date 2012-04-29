@@ -5,7 +5,8 @@ var auth = require('./auth.js')
   , render = require('./render.js');
 
 var app = require('http').createServer()
-  , io = require('socket.io').listen(app);
+  , io = require('socket.io').listen(app)
+  , uuid = require('node-uuid');
 
 app.listen(8082);
 io.set('log level', 1);
@@ -80,10 +81,10 @@ var validate_game = function(game, callback) {
 	});
 };
 
-var get_game_by_host = function(games, host_name) {
+var get_game_by_id = function(games, id) {
 	var game;
 	for(var i = 0; i < games.length; i++) {
-		if(games[i].host.name === host_name) {
+		if(games[i].id === id) {
 			game = games[i];
 			break;
 		}
@@ -103,7 +104,7 @@ var init_routes = function(app) {
 	app.get('/new_game', function(req, res) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('Not authorized, please log out/in again.', 401); return; }
-			create_game({host: user, map: req.query.map});
+			create_game({host: {name: user.name, rating: user.rating}, map: req.query.map, id: uuid.v1()});
 			res.send('/page/play');
 		});
 	});
@@ -147,11 +148,10 @@ var init_routes = function(app) {
 				db.get_user(opp_username, function(err, user) {
 					if(err) { console.log('failed to accept game with error: ', err); return; }
 					game.opp_username = opp_username;
-					game.opponent = user;
-					db.add_ongoing_game(host.name, game);
-					db.add_ongoing_game(user.name, game);
-					opp_socket.emit('accepted', host.name);
-					res.send('/game?host=' + host.name);
+					game.opponent = {name: user.name};
+					db.add_ongoing_game(game);
+					opp_socket.emit('accepted', game.id);
+					res.send('/game?id=' + game.id);
 				});
 				return;
 			}
@@ -173,7 +173,7 @@ var init_routes = function(app) {
 	app.get('/game', function(req, res) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('not authorized', 401); return; }
-			var game = get_game_by_host(user.ongoing_games, req.query.host);
+			var game = get_game_by_id(user.ongoing_games, req.query.id);
 			if(game && ((user.name === game.host.name) || 
 					    (user.name === game.opponent.name))) {
 				var env = { game: game };
@@ -190,14 +190,14 @@ var init_routes = function(app) {
 	app.get('/validate_game', function(req, res) {
 		auth.get_auth_user(req, function(user) {
 			if(!user) { res.send('not authorized', 401); return; }
-			var game = get_game_by_host(user.ongoing_games, req.query.host);
-			if(!game) { res.send('no game with host ' + req.query.host + ' exists.', 406); return };
+			var game = get_game_by_id(user.ongoing_games, req.query.id);
+			if(!game) { res.send('no game with id ' + req.query.id + ' exists.', 406); return };
 			if(((user.name === game.host.name) || 
 			    (user.name === game.opp_username))) {
 				validate_game(game, function(err, result) {
 					if(err) { res.send(err, 406); }
 					else { 
-						user_js.register_game(game.host.name, result);
+						user_js.register_game(game.id, result);
 						res.send('/user/' + user.name); 
 					}
 				});
