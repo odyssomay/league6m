@@ -29,6 +29,7 @@ var get_last_match_from_url = function(player_url, callback) {
 				}
 				else {
 					callback('failed to find if match is win or loss');
+					return;
 				}
 
 				callback(null, {
