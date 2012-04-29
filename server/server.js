@@ -1,16 +1,16 @@
 
 // **************************************************************
-/*
+
 var winston = require('winston');
 /*
 winston.add(winston.transports.File, { 
 	    filename: 'log', 
 	    handleExceptions: true 
 	  });
-
+*/
 winston.handleExceptions(new winston.transports.File({ filename: 'error.log' }))
 winston.add(winston.transports.File, { filename: 'info.log' });
-*/
+
 
 var auth = require('./src/auth.js')
   , data = require('./src/data.js')
