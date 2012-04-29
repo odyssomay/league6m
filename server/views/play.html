@@ -71,7 +71,7 @@
 	</form>
 </div>
 <div id="waiting-for-confirm-dialog" style="display: none;">
-	<h2>Waiting for confirmation</h2>
+	<h2>Waiting for host to answer</h2>
 	<img src="/images/loading_white.gif">
 	<a id="cancel-confirm-button" class="button big">cancel</a>
 </div>
@@ -97,13 +97,13 @@ socket.on('games', function(games) {
 		open_games.append('<p>No open games, sorry :(</p>');
 	}
 	else {
-		open_games.append('<tr><td>Author</td><td>Rank</td><td>Map</td></tr>');
+		open_games.append('<tr><td>Author</td><td>Rating</td><td>Server</td><td>Map</td></tr>');
 		for(var i = 0; i < games.length; i += 1) {
 			var game = games[i]
 			var td = function(str) {
 				return '<td onclick="start_game(\'' + game.host.name + '\')">' + str + '</td>';
 			};
-			open_games.append('<tr class="game-entry">' + td(game.host.name) + td(game.host.rating) + td(game.map) + '</tr>');
+			open_games.append('<tr class="game-entry">' + td(game.host.name) + td(game.host.rating)+ td(game.host.server) + td(game.map) + '</tr>');
 		}
 	}
 });
