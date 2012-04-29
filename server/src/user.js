@@ -18,13 +18,22 @@ var get_last_match_from_url = function(player_url, callback) {
 		else {
 			try {
 				var custom_element = window.document.getElementsByClassName('custom')['0']
-				  , td_elements = custom_element.getElementsByTagName('td')
-				  , ch_nodes = td_elements['0'].getElementsByTagName('div')['0'].childNodes;
+				  , td_elements = custom_element.getElementsByTagName('td');
+				var result;
+				if(custom_element.getElementsByClassName('match-loss').length !== 0) {
+					result = 'Loss';
+				}
+				else if(custom_element.getElementsByClassName('match-win').length !== 0) {
+					result = 'Win';
+				}
+				else {
+					callback('failed to find if match is win or loss');
+				}
 
 				callback(null, {
 					name: td_elements['1'].innerHTML
-					, speed: ch_nodes[ch_nodes.length - 1].nodeValue.trim()
-					, result: td_elements['3'].getElementsByTagName('span')['0'].innerHTML
+//					, speed: ch_nodes[ch_nodes.length - 1].nodeValue.trim()
+					, result: result
 				});
 			}
 			catch (e) {
@@ -35,8 +44,11 @@ var get_last_match_from_url = function(player_url, callback) {
 	});
 };
 
+//get_last_match_from_url("http://eu.battle.net/sc2/en/profile/2549843/1/Sísyphos/matches", console.log);
+get_last_match_from_url("http://kr.battle.net/sc2/ko/profile/1148174/1/TSLinori/matches", console.log);
+
 var get_last_match = function(username, callback) {
-	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
+//	if(username === 'd') { callback(null, { name: '6m FRB Cross Point', speed: 'Faster', result: 'Win' }); return; };
 	db.get_selected_character(username, function(err, character) {
 		if(err) { callback(err); return; }
 		get_last_match_from_url(character.link + 'matches', callback);
@@ -112,8 +124,6 @@ var register_game = function(id, result) {
 		});
 	});
 };
-
-//get_last_match_from_url("http://eu.battle.net/sc2/en/profile/2549843/1/Sísyphos/matches", console.log);
 
 var init_routes = function(app) {
 	var characters_pending = {};
