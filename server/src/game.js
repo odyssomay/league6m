@@ -11,7 +11,7 @@ var username_sockets = {};
 io.sockets.on('connection', function (socket) {
 	var username;
 	socket.on('user message', function (msg) {
-		io.sockets.emit('user message', socket.nickname, sanitize(msg).entityEncode());
+		io.sockets.emit('user message', username, sanitize(msg).entityEncode());
 	});
 
 	socket.on('username', function (name) {

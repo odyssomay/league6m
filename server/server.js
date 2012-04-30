@@ -17,6 +17,7 @@ var auth = require('./src/auth.js')
   , db   = require('./src/db.js')
   , user = require('./src/user.js')
   , chat = require('./src/chat.js')
+  , game = require('./src/game.js')
   , play = require('./src/play.js')
   , render = require('./src/render.js')
   , util = require('./src/util.js');

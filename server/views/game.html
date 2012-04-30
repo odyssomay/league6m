@@ -4,6 +4,7 @@
 <head>
 	{>partials.head}
 	<title>league6m - {game.host.name} vs {game.opponent.name}</title>
+	<link rel="stylesheet" href="/css/chat.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="/css/game.css" type="text/css" media="screen">
 </head>
 <body>
@@ -11,10 +12,12 @@
 <div class="container">
 	<div class="row">
 		<div class="twocol"></div>
-		<div class="eightcol" id="content">
+		<div class="fourcol" id="content">
 			<h2>You are playing</h2>
-			<p id="opponent_character">{if is_host} {game.opponent.selected_character} {else} {game.host.selected_character} {/if}</p>
-			<p>On map</p>
+			<p id="opponent_name">{if is_host} {game.opponent.name} {else} {game.host.name} {/if}</p>
+			<h2>Battle.net character</h2>
+			<p id="opponent_character"></p>
+			<h2>Map</h2>
 			<p id="map"><span class="apostrophe">'</span>{game.map}<span class="apostrophe">'</span></p>
 			<p>When the game has ended, press the validate button below</p>
 			<div id="validation-container">
@@ -30,10 +33,18 @@
 				<img src="/images/loading.gif">
 			</div>
 		</div>
+		<div class="fourcol" id="player-chat-container">
+			<h2>Chat</h2>
+			<table style="width: 100%" id="chat-container">
+				<tr><td><div id="messages-container"></div></td></tr>
+				<tr><td><input type="text" id="message-input"></td></tr>
+			</table>
+		</div>
 		<div class="twocol last"></div>
 	</div>
 </div>
 </body>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 	$(function() {
 		$('#validation-button').click(function() {
@@ -47,6 +58,33 @@
 					$('#validation-error').empty().append(xhr.responseText).show();
 				}
 			});	
+		});
+		var opponent_selected_character = "{if is_host}{game.opponent.selected_character}{else}{game.host.name}{/if}";
+		var s = opponent_selected_character.split('.');
+		$('#opponent_character').append('Name: <p id="character-identifier"><span class="apostrophe">\'</span>' + s[0] 
+		+ '<span class="apostrophe">\'</span></p> Code: <p id="character-identifier">' + s[1] + '</p>');
+
+		// CHAT //
+		var username = {if auth_user} "{auth_user.name}" {else} "Anonymous" {/if};
+		var url = 'http://' + window.location.host.split(':')[0] + ':8083';
+		var socket = io.connect(url);
+		socket.on('connect', function() {
+			socket.emit('username', username);
+		});
+
+		$('#message-input').keypress(function(e) {
+			if(e.which == 13) {
+				socket.emit('user message', $('#message-input').val());
+				$('#message-input').val('').focus();
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		socket.on('user message', function(username, message) {
+			var d = new Date();
+			$('#messages-container').append('<span class="message-date">' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() +
+				'</span><span class="message-user">' + username + '</span>: <span class="message">' + message + '</span><br>');
 		});
 	});
 </script>
