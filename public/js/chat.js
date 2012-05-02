@@ -16,8 +16,10 @@ $(function() {
 
 	socket.on('user message', function(username, message) {
 		var d = new Date();
-		$('#messages-container').append('<span class="message-date">' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() +
+		var m_c = $('#messages-container');
+		m_c.append('<span class="message-date">' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() +
 			'</span><span class="message-user">' + username + '</span>: <span class="message">' + message + '</span><br>');
+		m_c.scrollTop(m_c.prop("scrollHeight"));
 	});
 
 	socket.on('usernames', function (usernames, amount_anonymous) {
