@@ -205,14 +205,19 @@ var init_routes = function(app) {
 	app.get('/new_user', function(req, res) {
 		var options = req.query;
 		if(options.password === options.password2) {
-			new_user(options, function(err) {
-				if(err) {
-					res.send(err, 406);
-				}
-				else {
-					res.send('/login?name=' + options.name + '&password=' + options.password);
-				}
-			});
+			if(options.name.length >= 3) {
+				new_user(options, function(err) {
+					if(err) {
+						res.send(err, 406);
+					}
+					else {
+						res.send('/login?name=' + options.name + '&password=' + options.password);
+					}
+				});
+			}
+			else {
+				res.send('username is too short', 406);
+			}
 		}
 		else {
 			res.send('passwords don\'t match', 406);
