@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	{>partials.head}
+	<title>league6m - Play</title>
+	<link rel="stylesheet" href="/css/play.css" type="text/css" media="screen" />
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+{>partials.header}
+<div class="container">
+	<div class="row">
+		<div class="twocol"></div>
+		<div class="eightcol">
+			<table id="users" style="margin-top: 50px">
+				<tr>
+					<td>Name</td>
+					<td>Rating</td>
+				</tr>
+				{for user in users}
+				<tr>
+					<td><a href="/user/{user.name}">{user.name}</a></td>
+					<td>{user.rating}</td>
+				</tr>
+				{/for}
+			</table>
+		</div>
+		<div class="twocol last"></div>
+	</div>
+</div>
+</body>
+</html>
