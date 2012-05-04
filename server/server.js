@@ -47,6 +47,15 @@ app.get('/', function(req, res) {
 	});
 });
 
+app.get('/page/top', function(req, res) {
+	db.get_top50(function(err, users) {
+		if(err) {res.send(err, 406); return;}
+		render.render_page(req, 'top', {users: users}, function(err, msg) {
+			res.send(msg);
+		});
+	});
+});
+
 app.get('/page/:name', function(req, res) {
 	render.render_page(req, req.params.name, {}, function(err, msg) {
 		res.send(msg);

@@ -43,6 +43,7 @@ var UserPassSchema = new Schema({
 var User = mongoose.model('User', UserSchema)
   , UserPass = mongoose.model('UserPass', UserPassSchema); 
 
+
 var encrypt_password = function(password, callback) {
 	bcrypt.genSalt(10, function(err, salt) {
 		if(err) {
@@ -184,6 +185,22 @@ var add_ongoing_game = function(game) {
 //add_bnet_character('h', {name: 'hello', code: 340, link: "http://eu.battle.net/sc2/en/profile/2549843/1/Sísyphos/", selected: true});
 //User.update({name: 'h'}, {$set: {bnet_characters: [] }}, function(err){});
 
+var get_top50 = function(callback) {
+	top_users = [];
+	User.find().sort('rating', -1).limit(50).each(function(err, user) { 
+		if(err) {
+			console.log(err);
+			callback(err);
+		}
+		else if(user) {
+			top_users.push(user.toObject());
+		}
+		else {
+			callback(null, top_users);
+		}
+	});
+};
+
 var init_routes = function(app) {
 	app.get('/new_user', function(req, res) {
 		var options = req.query;
@@ -212,4 +229,5 @@ module.exports.select_bnet_character = select_bnet_character;
 module.exports.get_selected_character = get_selected_character;
 module.exports.user_pass_match = user_pass_match;
 module.exports.add_ongoing_game = add_ongoing_game;
+module.exports.get_top50 = get_top50;
 module.exports.init_routes = init_routes;
